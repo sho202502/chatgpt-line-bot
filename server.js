@@ -1,12 +1,14 @@
 // server.js
+require('dotenv').config(); // ← これを1行目に追加
 const express = require('express');
 const axios = require('axios');
 const app = express();
 app.use(express.json());
 
+// 環境変数を使ってAPIキーとアクセストークンを参照
 const LINE_REPLY_ENDPOINT = 'https://api.line.me/v2/bot/message/reply';
-const LINE_ACCESS_TOKEN = '3uZgPb04PtpHkpTB4ZeG5TDFlN7AAS1vFe8jwwSU3oHPw4irSBTe1HCusxyQinA8e2VH2FPYtmJdsz50evHYVRYKDKVnjlCHcD8rbRSy4vDI9GpHrS3TRNOz5rl+kmxdHxZyoEI1vC5Bgo7eOGmBJgdB04t89/1O/w1cDnyilFU=';
-const OPENAI_API_KEY = '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';
+const LINE_ACCESS_TOKEN = process.env.LINE_ACCESS_TOKEN;
+const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
 
 app.post('/webhook', async (req, res) => {
   const event = req.body.events[0];
