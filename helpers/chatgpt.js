@@ -6,10 +6,11 @@ const { buildPrompt } = require('./promptBuilder');
 /**
  * ChatGPT APIを使用して文例を生成
  * @param {string} userMessage - ユーザーからのメッセージ
+ * @param {Object} options - プロンプトオプション（年齢、月、カテゴリなど）
  * @returns {Promise<string>} 生成された文例テキスト
  */
-async function generateWithChatGPT(userMessage) {
-  const prompts = buildPrompt(userMessage);
+async function generateWithChatGPT(userMessage, options = {}) {
+  const prompts = buildPrompt(userMessage, options);
 
   try {
     const response = await axios.post(
@@ -21,7 +22,7 @@ async function generateWithChatGPT(userMessage) {
           { role: 'user', content: prompts.user }
         ],
         max_tokens: 1000,
-        temperature: 0.7
+        temperature: 0.7 //回答のランダム性 0が最低（毎回同じ回答）～1.0が最高(ほぼ異なる回答が返ってくる)
       },
       {
         headers: {
