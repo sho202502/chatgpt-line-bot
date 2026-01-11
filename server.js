@@ -1,4 +1,4 @@
-// server.js - メインアプリケーションファイル
+// server.js - メイン
 const express = require('express');
 const { PORT } = require('./config');
 const { isExampleRequest } = require('./helpers/messageValidator');
