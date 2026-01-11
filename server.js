@@ -4,6 +4,7 @@ const { PORT } = require('./config');
 const { isExampleRequest } = require('./helpers/messageValidator');
 const { generateWithChatGPT } = require('./helpers/chatgpt');
 const { replyToLine } = require('./helpers/lineMessaging');
+const { parseMessage } = require('./helpers/messageParser');
 
 const app = express();
 app.use(express.json());
@@ -44,8 +45,12 @@ app.post('/webhook', async (req, res) => {
 
       // 3) 判定：文例生成依頼かどうか
       if (isExampleRequest(userMessage)) {
+        // メッセージから年齢、月、カテゴリを抽出
+        const parsedInfo = parseMessage(userMessage);
+        console.log('抽出された情報:', parsedInfo);
+
         // 4〜6) 文例ルール取得 → プロンプト構築 → 生成
-        const generatedText = await generateWithChatGPT(userMessage);
+        const generatedText = await generateWithChatGPT(userMessage, parsedInfo);
 
         // 7) 出力：LINE返信
         await replyToLine(replyToken, generatedText);

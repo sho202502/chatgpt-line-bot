@@ -8,6 +8,7 @@
 function isExampleRequest(messageText) {
   const patterns = [
     /文例/,
+    /連絡帳/,
     /書いて/,
     /作成/,
     /作って/,
