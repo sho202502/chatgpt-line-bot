@@ -1,54 +1,71 @@
-// server.js
-require('dotenv').config(); // ← これを1行目に追加
+// server.js - メイン
 const express = require('express');
-const axios = require('axios');
+const { PORT } = require('./config');
+const { isExampleRequest } = require('./helpers/messageValidator');
+const { generateWithChatGPT } = require('./helpers/chatgpt');
+const { replyToLine } = require('./helpers/lineMessaging');
+
 const app = express();
 app.use(express.json());
 
-// 環境変数を使ってAPIキーとアクセストークンを参照
-const LINE_REPLY_ENDPOINT = 'https://api.line.me/v2/bot/message/reply';
-const LINE_ACCESS_TOKEN = process.env.LINE_ACCESS_TOKEN;
-const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
-
+// ============================
+// 1) トリガー & 2) 中継：Webhookエンドポイント
+// ============================
 app.post('/webhook', async (req, res) => {
-  const event = req.body.events[0];
-  if (!event || event.type !== 'message') return res.sendStatus(200);
+  try {
+    const events = req.body.events;
 
-  const userMessage = event.message.text;
+    // Webhookの検証リクエストに対応
+    if (!events || events.length === 0) {
+      return res.status(200).send('OK');
+    }
 
-  const response = await axios.post(
-    'https://api.openai.com/v1/chat/completions',
-    {
-      model: 'gpt-4o',
-      messages: [{ role: 'user', content: userMessage }]
-    },
-    {
-      headers: {
-        'Authorization': `Bearer ${OPENAI_API_KEY}`,
-        'Content-Type': 'application/json'
+    // 各イベントを処理
+    for (const event of events) {
+      // メッセージイベント以外は無視
+      if (event.type !== 'message') {
+        continue;
+      }
+
+      const replyToken = event.replyToken;
+
+      // テキストメッセージでない場合（スタンプ、画像など）
+      if (event.message.type !== 'text') {
+        await replyToLine(
+          replyToken,
+          '画像やスタンプには対応していないんです...文例作成をご希望の場合は、「〇〇の文例」や「〇〇を書いて」のようにお伝えください。'
+        );
+        continue;
+      }
+
+      // テキストメッセージの場合
+      const userMessage = event.message.text;
+      console.log('受信メッセージ:', userMessage);
+
+      // 3) 判定：文例生成依頼かどうか
+      if (isExampleRequest(userMessage)) {
+        // 4〜6) 文例ルール取得 → プロンプト構築 → 生成
+        const generatedText = await generateWithChatGPT(userMessage);
+
+        // 7) 出力：LINE返信
+        await replyToLine(replyToken, generatedText);
+      } else {
+        // 文例生成依頼ではない場合
+        await replyToLine(
+          replyToken,
+          '文例作成をご希望の場合は、「〇〇の文例」や「〇〇を書いて」のようにお伝えください。'
+        );
       }
     }
-  );
 
-  const replyMessage = response.data.choices[0].message.content;
-
-  await axios.post(
-    LINE_REPLY_ENDPOINT,
-    {
-      replyToken: event.replyToken,
-      messages: [{ type: 'text', text: replyMessage }]
-    },
-    {
-      headers: {
-        'Authorization': `Bearer ${LINE_ACCESS_TOKEN}`,
-        'Content-Type': 'application/json'
-      }
-    }
-  );
-
-  res.sendStatus(200);
+    res.status(200).send('OK');
+  } catch (error) {
+    console.error('Webhook処理エラー:', error);
+    res.status(500).send('Internal Server Error');
+  }
 });
 
-app.listen(3000, () => {
-  console.log('Server is running on port 3000');
+// サーバー起動
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
 });
