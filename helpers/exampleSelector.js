@@ -6,12 +6,12 @@ const contactExamples = require('../data/contactExamples.json');
  * @param {Object} options - フィルタリングオプション
  * @param {number} options.age - 子どもの年齢（0〜5歳）
  * @param {number} options.month - 月（1〜12）null可
- * @param {string} options.category - カテゴリ（daily_report, event_noticeなど）null可
+ * @param {Array<string>} options.tags - 検索タグ（例: ["散歩", "遊び"]）
  * @param {number} options.limit - 取得する例文の最大数（デフォルト: 3）
  * @returns {Array} フィルタリングされた例文の配列
  */
 function selectExamples(options = {}) {
-  const { age, month, category, limit = 3 } = options;
+  const { age, month, tags, limit = 3 } = options;
 
   let filtered = contactExamples.examples;
 
@@ -25,9 +25,12 @@ function selectExamples(options = {}) {
     filtered = filtered.filter(ex => ex.month === null || ex.month === month);
   }
 
-  // カテゴリでフィルタリング
-  if (category) {
-    filtered = filtered.filter(ex => ex.category === category);
+  // タグでフィルタリング（いずれかのタグが一致すればOK）
+  if (tags && tags.length > 0) {
+    filtered = filtered.filter(ex => {
+      if (!ex.tags) return false;
+      return tags.some(tag => ex.tags.includes(tag));
+    });
   }
 
   // 制限数を適用
@@ -65,26 +68,35 @@ function formatExamples(examples) {
  * @returns {Array} 例文の配列
  */
 function selectExamplesWithFallback(options = {}) {
-  const { age, month, category, limit = 3 } = options;
+  const { age, month, tags, limit = 3 } = options;
 
-  // 1. 完全一致で検索
+  // 1. 完全一致で検索（年齢 + 月 + タグ）
   let examples = selectExamples(options);
   if (examples.length > 0) {
     console.log('完全一致の例文が見つかりました');
     return examples;
   }
 
-  // 2. 年齢 + カテゴリで検索（月を無視）
-  if (age !== null && category) {
-    examples = selectExamples({ age, category, limit });
+  // 2. 年齢 + タグで検索（月を無視）
+  if (age !== null && age !== undefined && tags && tags.length > 0) {
+    examples = selectExamples({ age, tags, limit });
     if (examples.length > 0) {
-      console.log('年齢とカテゴリが一致する例文が見つかりました（月は異なる）');
+      console.log('年齢とタグが一致する例文が見つかりました（月は異なる）');
       return examples;
     }
   }
 
-  // 3. 年齢のみで検索（月とカテゴリを無視）
-  if (age !== null) {
+  // 3. 年齢 + 月で検索（タグを無視）
+  if (age !== null && age !== undefined && month !== null && month !== undefined) {
+    examples = selectExamples({ age, month, limit });
+    if (examples.length > 0) {
+      console.log('年齢と月が一致する例文が見つかりました（タグは異なる）');
+      return examples;
+    }
+  }
+
+  // 4. 年齢のみで検索（月とタグを無視）
+  if (age !== null && age !== undefined) {
     examples = selectExamples({ age, limit });
     if (examples.length > 0) {
       console.log('年齢が一致する例文が見つかりました');
@@ -92,16 +104,25 @@ function selectExamplesWithFallback(options = {}) {
     }
   }
 
-  // 4. カテゴリのみで検索（年齢と月を無視）
-  if (category) {
-    examples = selectExamples({ category, limit });
+  // 5. タグのみで検索（年齢と月を無視）
+  if (tags && tags.length > 0) {
+    examples = selectExamples({ tags, limit });
     if (examples.length > 0) {
-      console.log('カテゴリが一致する例文が見つかりました');
+      console.log('タグが一致する例文が見つかりました');
       return examples;
     }
   }
 
-  // 5. 全ての例文から取得（フォールバック）
+  // 6. 月のみで検索（年齢とタグを無視）
+  if (month !== null && month !== undefined) {
+    examples = selectExamples({ month, limit });
+    if (examples.length > 0) {
+      console.log('月が一致する例文が見つかりました');
+      return examples;
+    }
+  }
+
+  // 7. 全ての例文から取得（フォールバック）
   console.log('該当する例文がないため、全例文から参考として取得します');
   return selectExamples({ limit });
 }

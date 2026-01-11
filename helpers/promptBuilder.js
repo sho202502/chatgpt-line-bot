@@ -8,17 +8,17 @@ const { getExamplesForPrompt } = require('./exampleSelector');
  * @param {Object} options - オプション
  * @param {number} options.age - 子どもの年齢（0〜5歳）
  * @param {number} options.month - 月（1〜12）
- * @param {string} options.category - カテゴリ
+ * @param {Array<string>} options.tags - タグの配列
  * @returns {Object} システムプロンプトとユーザープロンプトを含むオブジェクト
  */
 function buildPrompt(userMessage, options = {}) {
-  const { age, month, category } = options;
+  const { age, month, tags } = options;
 
   // 条件に合った例文を取得
   const examples = getExamplesForPrompt({
     age,
     month,
-    category,
+    tags,
     limit: 3
   });
 
