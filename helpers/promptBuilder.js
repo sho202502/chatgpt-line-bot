@@ -18,9 +18,6 @@ function formatAllExamples() {
     if (example.month) {
       formatted += `・${example.month}月`;
     }
-    if (example.tags && example.tags.length > 0) {
-      formatted += `・タグ: ${example.tags.join(', ')}`;
-    }
     formatted += `）:\n`;
     formatted += `${example.text}\n\n`;
   });
