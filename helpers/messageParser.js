@@ -47,57 +47,19 @@ function extractMonth(message) {
 }
 
 /**
- * メッセージからタグを抽出
+ * メッセージから年齢、月を一括抽出
  * @param {string} message - ユーザーメッセージ
- * @returns {Array<string>} 抽出されたタグの配列
- */
-function extractTags(message) {
-  const tagKeywords = {
-    '散歩': ['散歩', 'お散歩', '公園'],
-    '遊び': ['遊び', '遊んで', '遊具'],
-    '食事': ['食事', '給食', 'ごはん', '昼食'],
-    '睡眠': ['睡眠', '昼寝', 'お昼寝'],
-    '日常': ['様子', '活動', '過ごし'],
-    '行事': ['行事', 'イベント', '遠足', '運動会', '発表会'],
-    'お知らせ': ['お知らせ', '連絡', '案内'],
-    '欠席': ['欠席', '休み', 'お休み'],
-    'お迎え': ['お迎え', '迎え', '降園'],
-    '成長': ['成長', 'できた', 'できるようになった'],
-    '興味・関心': ['興味', '関心', '好き', '夢中']
-  };
-
-  const extractedTags = [];
-
-  for (const [tag, keywords] of Object.entries(tagKeywords)) {
-    for (const keyword of keywords) {
-      if (message.includes(keyword)) {
-        if (!extractedTags.includes(tag)) {
-          extractedTags.push(tag);
-        }
-        break;
-      }
-    }
-  }
-
-  return extractedTags;
-}
-
-/**
- * メッセージから年齢、月、タグを一括抽出
- * @param {string} message - ユーザーメッセージ
- * @returns {Object} 抽出された情報 { age, month, tags }
+ * @returns {Object} 抽出された情報 { age, month }
  */
 function parseMessage(message) {
   return {
     age: extractAge(message),
-    month: extractMonth(message),
-    tags: extractTags(message)
+    month: extractMonth(message)
   };
 }
 
 module.exports = {
   extractAge,
   extractMonth,
-  extractTags,
   parseMessage
 };
