@@ -11,8 +11,6 @@ const PORT = process.env.PORT || 3000;
 const EXAMPLE_RULES = {
   format: `
     保育園向けの連絡文例として、以下の形式で作成してください：
-    【本文】
-    
     
     文体は丁寧で親しみやすく、保護者が読みやすい表現を心がけてください。
   `,
