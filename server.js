@@ -1,10 +1,9 @@
 // server.js - メイン
 const express = require('express');
 const { PORT } = require('./config');
-const { isExampleRequest } = require('./helpers/messageValidator');
+const { isIgnoreMessage } = require('./helpers/messageValidator');
 const { generateWithChatGPT } = require('./helpers/chatgpt');
 const { replyToLine } = require('./helpers/lineMessaging');
-const { parseMessage } = require('./helpers/messageParser');
 
 const app = express();
 app.use(express.json());
@@ -43,30 +42,37 @@ app.post('/webhook', async (req, res) => {
       const userMessage = event.message.text;
       console.log('受信メッセージ:', userMessage);
 
-      // 3) 判定：文例生成依頼かどうか
-      if (isExampleRequest(userMessage)) {
-        // メッセージから年齢、月、カテゴリを抽出
-        const parsedInfo = parseMessage(userMessage);
-        console.log('抽出された情報:', parsedInfo);
-
-        // 4〜6) 文例ルール取得 → プロンプト構築 → 生成
-        const generatedText = await generateWithChatGPT(userMessage, parsedInfo);
-
-        // 7) 出力：LINE返信
-        await replyToLine(replyToken, generatedText);
-      } else {
-        // 文例生成依頼ではない場合
+      // 3) 判定：除外対象なら早期リターン
+      if (isIgnoreMessage(userMessage)) {
         await replyToLine(
           replyToken,
           '文例作成をご希望の場合は、「〇〇の文例」や「〇〇を書いて」のようにお伝えください。'
         );
+        continue;
       }
+
+
+      // 即時で作業中であることをユーザーに伝える
+      await replyToLine(
+        replyToken,
+        '文例を書いています...しばらくお待ちください。'
+      );
+
+      // 文例生成
+      const generatedText = await generateWithChatGPT(userMessage);
+
+      // 7) 出力：LINE返信
+      await replyToLine(replyToken, generatedText);
     }
 
     res.status(200).send('OK');
   } catch (error) {
     console.error('Webhook処理エラー:', error);
     res.status(500).send('Internal Server Error');
+    await replyToLine(
+      replyToken,
+      '文例の作成ができませんでした。もう一度お試しください。'
+    );
   }
 });
 

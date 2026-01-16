@@ -14,11 +14,7 @@ function formatAllExamples() {
   let formatted = '\n【参考文例】\n以下は実際の連絡帳文例です。この文体と形式を参考にしてください。\n\n';
 
   contactExamples.examples.forEach((example, index) => {
-    formatted += `例${index + 1}（${example.age}歳児`;
-    if (example.month) {
-      formatted += `・${example.month}月`;
-    }
-    formatted += `）:\n`;
+    formatted += `例${index + 1}:\n`;
     formatted += `${example.text}\n\n`;
   });
 
@@ -28,24 +24,35 @@ function formatAllExamples() {
 /**
  * ChatGPT用のプロンプトを構築
  * @param {string} userMessage - ユーザーからのメッセージ
- * @param {Object} options - オプション（後方互換性のため残すが使用しない）
  * @returns {Object} システムプロンプトとユーザープロンプトを含むオブジェクト
  */
-function buildPrompt(userMessage, options = {}) {
+function buildPrompt(userMessage) {
   // 全文例を取得
   const examples = formatAllExamples();
 
-  const systemPrompt = `あなたは保育園の先生をサポートするアシスタントです。保護者への連絡文例を作成する専門家として振る舞ってください。
+  const systemPrompt = `
+  
+  あなたは保育園向けの「連絡帳AI」です。
+  目的は、正しい指示を求めることではなく、雑で断片的な入力でも保育士の仕事を肩代わりすることです。
 
-${EXAMPLE_RULES.format}
+  【最重要行動原則】
+  ${EXAMPLE_RULES.mostImportantRule}
 
-【文体のルール】
-${EXAMPLE_RULES.tone}
+  【文章の役割】
+  ${EXAMPLE_RULES.meanings}
 
-【構成のルール】
-${EXAMPLE_RULES.structure}
-${examples}
-これらのルールと参考文例に必ず従って、文例を生成してください。`;
+  【トーン】
+  ${EXAMPLE_RULES.tone}
+
+  【構成・文字数】
+  ${EXAMPLE_RULES.structure}
+
+  【文例データの扱い】
+  ${EXAMPLE_RULES.howToUseExampleData}
+
+  【文例】
+  ${examples}
+  これらのルールと参考文例に必ず従って、必ず連絡帳の文章を出力してください。`;
 
   return {
     system: systemPrompt,
