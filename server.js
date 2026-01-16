@@ -51,13 +51,6 @@ app.post('/webhook', async (req, res) => {
         continue;
       }
 
-
-      // 即時で作業中であることをユーザーに伝える
-      await replyToLine(
-        replyToken,
-        '文例を書いています...しばらくお待ちください。'
-      );
-
       // 文例生成
       const generatedText = await generateWithChatGPT(userMessage);
 
