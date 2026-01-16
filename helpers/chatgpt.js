@@ -6,11 +6,10 @@ const { buildPrompt } = require('./promptBuilder');
 /**
  * ChatGPT APIを使用して文例を生成
  * @param {string} userMessage - ユーザーからのメッセージ
- * @param {Object} options - プロンプトオプション（年齢、月、タグなど）
  * @returns {Promise<string>} 生成された文例テキスト
  */
-async function generateWithChatGPT(userMessage, options = {}) {
-  const prompts = buildPrompt(userMessage, options);
+async function generateWithChatGPT(userMessage) {
+  const prompts = buildPrompt(userMessage);
 
   try {
     const response = await axios.post(

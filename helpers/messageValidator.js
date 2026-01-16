@@ -1,25 +1,22 @@
 // メッセージ判定ヘルパー
 
 /**
- * 文例生成依頼かどうかを判定
+ * 文例生成対象外かどうかを判定（ブラックリスト方式）
  * @param {string} messageText - 判定対象のメッセージテキスト
- * @returns {boolean} 文例生成依頼の場合true
+ * @returns {boolean} 除外対象の場合true
  */
-function isExampleRequest(messageText) {
-  const patterns = [
-    /文例/,
-    /連絡帳/,
-    /書いて/,
-    /作成/,
-    /作って/,
-    /例文/,
-    /テンプレート/,
-    /お便り/,
+function isIgnoreMessage(messageText) {
+  // 明確に連絡帳と無関係なものだけを除外
+  const ignorePatterns = [
+    /^https?:\/\//,
+    /使い方/,
+    /ヘルプ/,
+    /設定/,
   ];
 
-  return patterns.some(pattern => pattern.test(messageText));
+  return ignorePatterns.some((p) => p.test(messageText));
 }
 
 module.exports = {
-  isExampleRequest
+  isIgnoreMessage
 };

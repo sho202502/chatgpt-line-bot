@@ -14,11 +14,7 @@ function formatAllExamples() {
   let formatted = '\n【参考文例】\n以下は実際の連絡帳文例です。この文体と形式を参考にしてください。\n\n';
 
   contactExamples.examples.forEach((example, index) => {
-    formatted += `例${index + 1}（${example.age}歳児`;
-    if (example.month) {
-      formatted += `・${example.month}月`;
-    }
-    formatted += `）:\n`;
+    formatted += `例${index + 1}:\n`;
     formatted += `${example.text}\n\n`;
   });
 
@@ -28,10 +24,9 @@ function formatAllExamples() {
 /**
  * ChatGPT用のプロンプトを構築
  * @param {string} userMessage - ユーザーからのメッセージ
- * @param {Object} options - オプション（後方互換性のため残すが使用しない）
  * @returns {Object} システムプロンプトとユーザープロンプトを含むオブジェクト
  */
-function buildPrompt(userMessage, options = {}) {
+function buildPrompt(userMessage) {
   // 全文例を取得
   const examples = formatAllExamples();
 
