@@ -6,9 +6,10 @@ const { buildPrompt } = require('./promptBuilder');
 /**
  * ChatGPT APIを使用して文例を生成
  * @param {string} userMessage - ユーザーからのメッセージ
+ * @param {Array<{role: string, content: string}>} history - 会話履歴（省略可）
  * @returns {Promise<string>} 生成された文例テキスト
  */
-async function generateWithChatGPT(userMessage) {
+async function generateWithChatGPT(userMessage, history = []) {
   const prompts = buildPrompt(userMessage);
 
   try {
@@ -18,6 +19,7 @@ async function generateWithChatGPT(userMessage) {
         model: 'gpt-4o',
         messages: [
           { role: 'system', content: prompts.system },
+          ...history,
           { role: 'user', content: prompts.user }
         ],
         max_tokens: 1000,
