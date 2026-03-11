@@ -4,6 +4,7 @@ const { PORT } = require('./config');
 const { isIgnoreMessage } = require('./helpers/messageValidator');
 const { generateWithChatGPT } = require('./helpers/chatgpt');
 const { replyToLine } = require('./helpers/lineMessaging');
+const { getHistory, addTurn } = require('./helpers/conversationMemory');
 
 const app = express();
 app.use(express.json());
@@ -24,6 +25,13 @@ app.post('/webhook', async (req, res) => {
     for (const event of events) {
       // メッセージイベント以外は無視
       if (event.type !== 'message') {
+        continue;
+      }
+
+      const userId = event.source?.userId;
+      // 異常系処理のガード
+      if (!userId) {
+        console.warn('userId 未取得のイベントをスキップ');
         continue;
       }
 
@@ -51,8 +59,12 @@ app.post('/webhook', async (req, res) => {
         continue;
       }
 
-      // 文例生成
-      const generatedText = await generateWithChatGPT(userMessage);
+      // 文例生成（会話履歴を渡す）
+      const history = getHistory(userId);
+      const generatedText = await generateWithChatGPT(userMessage, history);
+
+      // 履歴に追加
+      addTurn(userId, userMessage, generatedText);
 
       // 7) 出力：LINE返信
       await replyToLine(replyToken, generatedText);

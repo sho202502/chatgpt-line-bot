@@ -24,9 +24,10 @@ function formatAllExamples() {
 /**
  * ChatGPT用のプロンプトを構築
  * @param {string} userMessage - ユーザーからのメッセージ
+ * @param {Array} history - 会話履歴（受け取るが未使用。展開は chatgpt.js で行う）
  * @returns {Object} システムプロンプトとユーザープロンプトを含むオブジェクト
  */
-function buildPrompt(userMessage) {
+function buildPrompt(userMessage, history = []) {
   // 全文例を取得
   const examples = formatAllExamples();
 
