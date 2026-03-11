@@ -1,7 +1,6 @@
 // 会話メモリヘルパー（プロセス内 Map による会話履歴管理）
-const MAX_TURNS = 30;
-const TTL_MS = 24 * 60 * 60 * 1000; // 24時間
-const GC_INTERVAL_MS = 60 * 60 * 1000; // 1時間
+const { MEMORY_SETTINGS } = require('../config');
+const { MAX_TURNS, TTL_MS, GC_INTERVAL_MS } = MEMORY_SETTINGS;
 
 /** @type {Map<string, { turns: Array<{role: string, content: string}>, lastActiveAt: Date }>} */
 const conversations = new Map();
@@ -46,6 +45,8 @@ function addTurn(userId, userMessage, assistantReply) {
   }
   entry.lastActiveAt = new Date();
   conversations.set(userId, entry);
+  console.log(`[Memory] userId=${userId} turns=${entry.turns.length / 2}/${MAX_TURNS}`);
+  console.log('[Memory] history:', JSON.stringify(entry.turns, null, 2));
 }
 
 /**
