@@ -1,6 +1,6 @@
 // ChatGPT API連携ヘルパー
 const axios = require('axios');
-const { OPENAI_API_KEY } = require('../config');
+const { OPENAI_API_KEY, OPENAI_MODEL } = require('../config');
 const { buildPrompt } = require('./promptBuilder');
 
 /**
@@ -16,7 +16,7 @@ async function generateWithChatGPT(userMessage, history = []) {
     const response = await axios.post(
       'https://api.openai.com/v1/chat/completions',
       {
-        model: 'gpt-4o',
+        model: OPENAI_MODEL,
         messages: [
           { role: 'system', content: prompts.system },
           ...history,
