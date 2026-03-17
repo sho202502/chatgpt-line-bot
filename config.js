@@ -8,7 +8,7 @@ const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
 const PORT = process.env.PORT || 3000;
 
 // OpenAI モデル設定
-const OPENAI_MODEL = 'gpt-4o';
+const OPENAI_MODEL = 'gpt-5';
 
 // 会話メモリ設定
 const MEMORY_SETTINGS = {
