@@ -22,7 +22,7 @@ async function generateWithChatGPT(userMessage, history = []) {
           ...history,
           { role: 'user', content: prompts.user }
         ],
-        max_tokens: 1000,
+        max_completion_tokens: 1000,
         temperature: 0.7 //回答のランダム性 0が最低（毎回同じ回答）～1.0が最高(ほぼ異なる回答が返ってくる)
       },
       {
