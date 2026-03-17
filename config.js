@@ -12,7 +12,7 @@ const OPENAI_MODEL = 'gpt-4o';
 
 // 会話メモリ設定
 const MEMORY_SETTINGS = {
-  MAX_TURNS: 15, // 会話履歴の最大ターン数（ユーザー発言＋アシスタント返答で1ターン）
+  MAX_TURNS: 10, // 会話履歴の最大ターン数（ユーザー発言＋アシスタント返答で1ターン）
   TTL_MS: 24 * 60 * 60 * 1000,   // 24時間
   GC_INTERVAL_MS: 60 * 60 * 1000  // 1時間
 };
