@@ -25,7 +25,7 @@ async function replyToLine(replyToken, message) {
           action: {
             type: 'message',
             label: 'おとなしい子',
-            text: 'おとなしい子'
+            text: 'おとなしい子\n\n※子どもの性格や場面、長さや言い方も自由に変えられます♪'
           }
         },
         {
@@ -33,7 +33,7 @@ async function replyToLine(replyToken, message) {
           action: {
             type: 'message',
             label: '具体的にする',
-            text: '具体的にして'
+            text: '具体的にして\n\n※子どもの性格や場面、長さや言い方も自由に変えられます♪'
           }
         },
         {
@@ -41,7 +41,7 @@ async function replyToLine(replyToken, message) {
           action: {
             type: 'message',
             label: 'やわらかい文章',
-            text: 'やわらかい文章にして'
+            text: 'やわらかい文章にして\n\n※子どもの性格や場面、長さや言い方も自由に変えられます♪'
           }
         },
         {
@@ -49,7 +49,7 @@ async function replyToLine(replyToken, message) {
           action: {
             type: 'message',
             label: '短くする',
-            text: '短くして'
+            text: '短くして\n\n※子どもの性格や場面、長さや言い方も自由に変えられます♪'
           }
         },
         {
@@ -57,7 +57,7 @@ async function replyToLine(replyToken, message) {
           action: {
             type: 'message',
             label: '友だちとの関わり',
-            text: '友だちとの関わりを入れて'
+            text: '友だちとの関わりを入れて\n\n※子どもの性格や場面、長さや言い方も自由に変えられます♪'
           }
         }
       ]
