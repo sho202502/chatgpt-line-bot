@@ -33,8 +33,8 @@ async function replyToLine(replyToken, message) {
           type: 'action',
           action: {
             type: 'message',
-            label: '具体的にする',
-            text: '具体的にして' + CRmessage
+            label: '友だちとの関わり',
+            text: '友だちとの関わりを入れて' + CRmessage
           }
         },
         {
@@ -57,8 +57,8 @@ async function replyToLine(replyToken, message) {
           type: 'action',
           action: {
             type: 'message',
-            label: '友だちとの関わり',
-            text: '友だちとの関わりを入れて' + CRmessage
+            label: '具体的にする',
+            text: '具体的にして' + CRmessage
           }
         }
       ]
