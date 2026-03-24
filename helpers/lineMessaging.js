@@ -15,11 +15,55 @@ async function replyToLine(replyToken, message) {
       {
         replyToken: replyToken,
         messages: [
-          {
-            type: 'text',
-            text: message
+  {
+    type: 'text',
+    text: message,
+    quickReply: {
+      items: [
+        {
+          type: 'action',
+          action: {
+            type: 'message',
+            label: 'おとなしい子',
+            text: 'おとなしい子'
           }
-        ]
+        },
+        {
+          type: 'action',
+          action: {
+            type: 'message',
+            label: '具体的にする',
+            text: '具体的にして'
+          }
+        },
+        {
+          type: 'action',
+          action: {
+            type: 'message',
+            label: 'やわらかい文章',
+            text: 'やわらかい文章にして'
+          }
+        },
+        {
+          type: 'action',
+          action: {
+            type: 'message',
+            label: '短くする',
+            text: '短くして'
+          }
+        },
+        {
+          type: 'action',
+          action: {
+            type: 'message',
+            label: '友だちとの関わり',
+            text: '友だちとの関わりを入れて'
+          }
+        }
+      ]
+    }
+  }
+]
       },
       {
         headers: {
