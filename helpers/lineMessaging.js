@@ -25,8 +25,8 @@ async function replyToLine(replyToken, message) {
           type: 'action',
           action: {
             type: 'message',
-            label: 'おとなしい子',
-            text: 'おとなしい子' + CRmessage
+            label: '静かな子',
+            text: '静かなの場合' + CRmessage
           }
         },
         {
@@ -41,7 +41,7 @@ async function replyToLine(replyToken, message) {
           type: 'action',
           action: {
             type: 'message',
-            label: 'やわらかい文章',
+            label: 'やわらかく',
             text: 'やわらかい文章にして' + CRmessage
           }
         },
@@ -49,7 +49,7 @@ async function replyToLine(replyToken, message) {
           type: 'action',
           action: {
             type: 'message',
-            label: '短くする',
+            label: '短く',
             text: '短くして' + CRmessage
           }
         },
@@ -57,7 +57,7 @@ async function replyToLine(replyToken, message) {
           type: 'action',
           action: {
             type: 'message',
-            label: '具体的にする',
+            label: '具体的',
             text: '具体的にして' + CRmessage
           }
         }
