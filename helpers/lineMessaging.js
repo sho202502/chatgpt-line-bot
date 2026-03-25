@@ -1,7 +1,6 @@
 // LINE Messaging API連携ヘルパー
 const axios = require('axios');
 const { LINE_REPLY_ENDPOINT, LINE_ACCESS_TOKEN } = require('../config');
-const CRmessage = '\n\n※子どもの性格や場面、長さや言い方も自由に変えられます♪'; // ◀クイックリプライの文末に付与
 
 /**
  * LINEメッセージを返信
@@ -23,39 +22,23 @@ async function replyToLine(replyToken, message) {
                   action: {
                     type: 'message',
                     label: '別の文',
-                    text: '別の文にして' + CRmessage
+                    text: '別の文にして'
                   }
                 },
                 {
                   type: 'action',
                   action: {
                     type: 'message',
-                    label: 'おとなしい子',
-                    text: 'おとなしい子の場合' + CRmessage
+                    label: '例①',
+                    text: 'おとなしい子、短くして\n\n※子どもの性格や場面、文章の長さや雰囲気も『内容や様子を入力』から自由に変えられます♪'
                   }
                 },
                 {
                   type: 'action',
                   action: {
                     type: 'message',
-                    label: '友だちとの関わり',
-                    text: '友だちとの関わりを入れて' + CRmessage
-                  }
-                },
-                {
-                  type: 'action',
-                  action: {
-                    type: 'message',
-                    label: 'やわらかく',
-                    text: 'やわらかい文章にして' + CRmessage
-                  }
-                },
-                {
-                  type: 'action',
-                  action: {
-                    type: 'message',
-                    label: '短く',
-                    text: '短くして' + CRmessage
+                    label: '例②',
+                    text: 'リレーで悔しがっていた。あと、友だちとの関わりを入れたい。\n\n※単語でも文章でも入力OKです。『内容や様子を入力』から自由に書いてね♪'
                   }
                 }
               ]
@@ -81,3 +64,4 @@ async function replyToLine(replyToken, message) {
 module.exports = {
   replyToLine
 };
+
