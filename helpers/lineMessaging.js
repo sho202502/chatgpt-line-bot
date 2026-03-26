@@ -30,7 +30,7 @@ async function replyToLine(replyToken, message) {
                   action: {
                     type: 'message',
                     label: '例①',
-                    text: 'おとなしい子、短くして\n\n※子どもの性格や場面、文章の長さや雰囲気も『内容や様子を入力』から自由に変えられます♪'
+                    text: 'おとなしい子、今回だけ短くして\n\n※子どもの性格や場面、文章の長さや雰囲気も『内容や様子を入力』から自由に変えられます♪'
                   }
                 },
                 {
