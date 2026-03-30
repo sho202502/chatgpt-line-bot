@@ -29,7 +29,7 @@ async function replyToLine(replyToken, message) {
                   type: 'action',
                   action: {
                     type: 'message',
-                    label: '例①',
+                    label: '入力例①',
                     text: 'おとなしい子、今回だけ短くして\n\n※子どもの性格や場面、文章の長さや雰囲気も『内容や様子を入力』から自由に変えられます♪'
                   }
                 },
@@ -37,7 +37,7 @@ async function replyToLine(replyToken, message) {
                   type: 'action',
                   action: {
                     type: 'message',
-                    label: '例②',
+                    label: '入力例②',
                     text: 'リレーで悔しがっていた。あと、友だちとの関わりを入れたい。\n\n※単語でも文章でも入力OKです。『内容や様子を入力』から自由に書いてね♪'
                   }
                 }
